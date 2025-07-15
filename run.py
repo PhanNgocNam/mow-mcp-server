@@ -1,7 +1,6 @@
 import os
 import sys
-from mcp_with_db.server import MCPWithDB
-import json
+from server import MCPWithDB
 
 def main():
     # Ensure environment variable is set
