@@ -16,6 +16,8 @@ class MCPWithDB:
         # Register schema exploration tool
         self.mcp.tool("explore_database_schema_str")(self._handle_explore_scheme_str)
         self.mcp.tool("explore_database_schema")(self._handle_explore_schema)
+        self.mcp.tool("explore_database_schema_of_a_list_of_specific_tables")(self._handle_explore_schema_for_specific_tables_to_string)
+
         # Register stored procedure analysis tool
         self.mcp.tool("analyze_stored_procedure")(self._handle_analyze_procedure)
 
@@ -27,6 +29,17 @@ class MCPWithDB:
         str: A string representation of the schema.
         """
         return self.explorer.explore_to_string(schema_name)
+    
+    def _handle_explore_schema_for_specific_tables_to_string(self, tables = list[str], schema_name: str = "dbo"):
+        """
+        MCP tool handler for exploring the database schema of a list of specific tables.
+
+        Returns:
+        str: A string representation of the extracted schema.
+        """
+        return self.explorer.explore_specific_table_to_string(self, schema_name, tables)
+
+
     def _handle_explore_schema(self, output_file_path: str, schema_name: str = "dbo"):
         """
         MCP tool handler for exploring the database schema and generating a Markdown-format report.

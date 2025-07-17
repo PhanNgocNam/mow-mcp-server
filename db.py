@@ -2,9 +2,18 @@ import os
 import pyodbc
 
 class DatabaseConnector:
+    _instance = None  # Class variable to hold the single instance
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(DatabaseConnector, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self, env_var='AZURE_SQL_CONNECTIONSTRING'):
-        self.env_var = env_var
-        self.connection = None
+        if not hasattr(self, 'initialized'):  # Ensure initialization happens only once
+            self.env_var = env_var
+            self.connection = None
+            self.initialized = True
 
     def connect(self):
         """
