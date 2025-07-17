@@ -1,6 +1,7 @@
 import os
 import sys
 from server import MCPWithDB
+import json
 
 def main():
     # Ensure environment variable is set
@@ -24,6 +25,7 @@ def main():
         server.run()
         # print(json.dumps(server._handle_analyze_procedure("ps_test")))
         # print(json.dumps(server._handle_explore_schema("./final_test.md")))
+        # print(json.dumps(server._handle_explore_schema_for_specific_tables_to_string("tb_order, tb_users, tb_product, tb_orderdetail")))
 
 if __name__ == "__main__":
     main()

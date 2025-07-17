@@ -137,6 +137,7 @@ class SchemaExplorer:
             schema_name: The name of the database schema to explore (default is 'dbo').
             tables: a list of given tables for exploring.
         """
+        print(tables)
         if not self.db_connection:
             return {"error": "Database connection not available."}
         try:
@@ -164,7 +165,7 @@ class SchemaExplorer:
                     ) pk ON c.TABLE_SCHEMA = pk.TABLE_SCHEMA AND c.TABLE_NAME = pk.TABLE_NAME AND c.COLUMN_NAME = pk.COLUMN_NAME
                     WHERE c.TABLE_SCHEMA = ? AND c.TABLE_NAME = ?
                     ORDER BY c.ORDINAL_POSITION
-                """, schema_name, table)
+                """, schema_name, table.strip())
 
                 columns_data = {}
                 for row in cursor.fetchall():
@@ -219,25 +220,6 @@ class SchemaExplorer:
 
                 db_desc.append("")  # Blank line for spacing
 
-            # --- Get Views ---
-            cursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA = ?", schema_name)
-            views = [row.TABLE_NAME for row in cursor.fetchall()]
-            if views:
-                db_desc.append("## Views")
-                for view in views:
-                    db_desc.append(f"- {view}")
-                db_desc.append("")
-
-            # --- Get Stored Procedures ---
-            cursor.execute("SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_SCHEMA = ?", schema_name)
-            sprocs = [row.ROUTINE_NAME for row in cursor.fetchall()]
-            if sprocs:
-                db_desc.append("## Stored Procedures")
-                for sproc in sprocs:
-                    db_desc.append(f"- {sproc}")
-                db_desc.append("")
-
-            # --- Write to File ---
             final_content = "\n".join(db_desc)
             return final_content
         except:
