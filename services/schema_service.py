@@ -1,11 +1,8 @@
 import pyodbc
-from typing import Dict, Any
+from services.base_service import BaseService
 
-class SchemaExplorer:
-    def __init__(self, connection: pyodbc.Connection):
-        self.db_connection = connection
-
-    def explore_to_string(self, schema_name: str = 'dbo') -> str:
+class SchemaService(BaseService):
+    def get_schema_as_string(self, schema_name: str = 'dbo') -> str:
         """
         Explore the database schema and output it as a Markdown-formatted string.
 
@@ -125,11 +122,11 @@ class SchemaExplorer:
             # --- Write to File ---
             final_content = "\n".join(db_desc)
             return final_content
-        except:
+        except pyodbc.Error as ex:
             print(f"Error querying database: {ex}")
             return {"error": "Failed to explore database schema."}
 
-    def explore_specific_table_to_string(self, tables: list[str], schema_name: str = 'dbo') -> str:
+    def get_specific_table_schema_as_string(self, tables: list[str], schema_name: str = 'dbo') -> str:
         """
         Explore the database schema and output it as a Markdown-formatted string.
 
@@ -137,7 +134,6 @@ class SchemaExplorer:
             schema_name: The name of the database schema to explore (default is 'dbo').
             tables: a list of given tables for exploring.
         """
-        print(tables)
         if not self.db_connection:
             return {"error": "Database connection not available."}
         try:
@@ -222,36 +218,6 @@ class SchemaExplorer:
 
             final_content = "\n".join(db_desc)
             return final_content
-        except:
-            print(f"Error querying database: {ex}")
-            return {"error": "Failed to explore database schema."}
-
-    def explore_to_markdown(self, output_file_path: str, schema_name: str = 'dbo') -> Dict[str, Any]:
-        """
-        Explores the database schema and generates a Markdown report.
-
-        Args:
-            output_file_path: The absolute path where the Markdown report will be saved.
-            schema_name: The name of the database schema to explore (default is 'dbo').
-        """
-        if not self.db_connection:
-            return {"error": "Database connection not available."}
-
-        if not output_file_path.endswith('.md'):
-            return {"error": "Output file path must end with .md"}
-
-        try:
-            db_desc = self.explore_to_string(schema_name)
-
-            # --- Write to File ---
-            with open(output_file_path, 'w', encoding='utf-8') as f:
-                f.write(db_desc)
-
-            return {"status": "success", "file_path": output_file_path}
-
         except pyodbc.Error as ex:
             print(f"Error querying database: {ex}")
             return {"error": "Failed to explore database schema."}
-        except IOError as e:
-            print(f"Error writing to file: {e}")
-            return {"error": f"Failed to write to output file: {output_file_path}"}
