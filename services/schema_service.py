@@ -1,3 +1,4 @@
+import sys
 import pyodbc
 from services.base_service import BaseService
 
@@ -123,7 +124,7 @@ class SchemaService(BaseService):
             final_content = "\n".join(db_desc)
             return final_content
         except pyodbc.Error as ex:
-            print(f"Error querying database: {ex}")
+            print(f"Error querying database: {ex}", file=sys.stderr)
             return {"error": "Failed to explore database schema."}
 
     def get_specific_table_schema_as_string(self, tables: list[str], schema_name: str = 'dbo') -> str:
@@ -219,5 +220,5 @@ class SchemaService(BaseService):
             final_content = "\n".join(db_desc)
             return final_content
         except pyodbc.Error as ex:
-            print(f"Error querying database: {ex}")
+            print(f"Error querying database: {ex}", file=sys.stderr)
             return {"error": "Failed to explore database schema."}

@@ -1,3 +1,4 @@
+import sys
 from tools.base_tool import BaseTool
 from services.schema_service import SchemaService
 from typing import Dict, Any
@@ -47,5 +48,5 @@ class ExploreSchemaTool(BaseTool):
             return {"status": "success", "file_path": output_file_path}
 
         except IOError as e:
-            print(f"Error writing to file: {e}")
+            print(f"Error writing to file: {e}", file=sys.stderr)
             return {"error": f"Failed to write to output file: {output_file_path}"}

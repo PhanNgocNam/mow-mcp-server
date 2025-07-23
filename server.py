@@ -1,3 +1,4 @@
+import sys
 from mcp.server.fastmcp import FastMCP
 from db import DatabaseConnector
 from factory.tool_factory import ToolFactory
@@ -21,7 +22,7 @@ class MCPWithDB:
             self.proc_analyzer = tool_factory.create("analyze_procedure", db_connection=self.db_connection)
             self._register_tools()
         except Exception as e:
-            print(f"Failed to set up the server: {e}")
+            print(f"Failed to set up the server: {e}", file=sys.stderr)
             self.db_connection = None
 
     def _register_tools(self):
@@ -74,7 +75,7 @@ class MCPWithDB:
         """
         Shuts down the server and closes the database connection.
         """
-        print("Shutting down server...")
+        print("Shutting down server...", file=sys.stderr)
         if self.db_connection:
             DatabaseConnector().close()
 
@@ -82,8 +83,9 @@ class MCPWithDB:
         """
         Runs the MCP server.
         """
+        self.setup()
         if self.db_connection:
-            print("Starting MO MSSQL MCP server...")
+            print("Starting MO MSSQL MCP server...", file=sys.stderr)
             self.mcp.run(transport='stdio')
         else:
-            print("Failed to start server due to database connection error.")
+            print("Failed to start server due to database connection error.", file=sys.stderr)

@@ -1,4 +1,5 @@
 import os
+import sys
 import pyodbc
 
 class DatabaseConnector:
@@ -28,10 +29,10 @@ class DatabaseConnector:
 
         try:
             self.connection = pyodbc.connect(self._connection_string)
-            print("Successfully connected to the database.")
+            print("Successfully connected to the database.", file=sys.stderr)
             return self.connection
         except pyodbc.Error as ex:
-            print(f"Database connection error: {ex}")
+            print(f"Database connection error: {ex}", file=sys.stderr)
             self.connection = None
             raise
 
@@ -41,5 +42,5 @@ class DatabaseConnector:
         """
         if self.connection:
             self.connection.close()
-            print("Database connection closed.")
+            print("Database connection closed.", file=sys.stderr)
             self.connection = None
