@@ -1,6 +1,7 @@
 import os
 import sys
 import pyodbc
+import atexit
 
 class DatabaseConnector:
     _shared_state = {}  # Borg pattern
@@ -12,6 +13,7 @@ class DatabaseConnector:
             self.connection = None
             self._connection_string = os.environ.get(self.env_var)
             self.initialized = True
+            atexit.register(self.close)
 
     def connect(self):
         """

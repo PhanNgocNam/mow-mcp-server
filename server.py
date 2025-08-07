@@ -73,11 +73,9 @@ class MCPWithDB:
 
     def shutdown(self):
         """
-        Shuts down the server and closes the database connection.
+        Shuts down the server.
         """
         print("Shutting down server...", file=sys.stderr)
-        if self.db_connection:
-            DatabaseConnector().close()
 
     def run(self):
         """

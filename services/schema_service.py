@@ -127,7 +127,7 @@ class SchemaService(BaseService):
             print(f"Error querying database: {ex}", file=sys.stderr)
             return {"error": "Failed to explore database schema."}
 
-    def get_specific_table_schema_as_string(self, tables: list[str], schema_name: str = 'dbo') -> str:
+    def gppet_specific_table_schema_as_string(self, tables: list[str], schema_name: str = 'dbo') -> str:
         """
         Explore the database schema and output it as a Markdown-formatted string.
 
