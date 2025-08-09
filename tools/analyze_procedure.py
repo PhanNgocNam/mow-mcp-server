@@ -1,7 +1,6 @@
-from tools.base_tool import BaseTool
 from services.procedure_service import ProcedureService
 
-class AnalyzeProcedureTool(BaseTool):
+class AnalyzeProcedureTool():
     def __init__(self, db_connection):
         super().__init__()
         self.procedure_service = ProcedureService(db_connection)
